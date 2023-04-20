@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+//import React from 'react';
 import './App.css';
+import { proxy } from './Proxy';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from 'react';
+import { Login } from './Login'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Main } from './Main';
+
+
+export default class App extends Component {
+  
+  componentDidMount(): void {
+    proxy.addEventListener("login", () => {this.setState({loggedIn: true})}, this)
+  }
+  
+  componentWillUnmount() {
+    proxy.removeAllEventListener(this);
+  }
+
+  state = {loggedIn: false};
+
+  render() {
+    return (
+      <div className="app">
+        {this.state.loggedIn ? <Main /> : <Login /> }
+      </div>
+    );
+  }
 }
-
-export default App;
